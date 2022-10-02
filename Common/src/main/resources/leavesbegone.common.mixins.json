@@ -6,7 +6,6 @@
   "refmap": "leavesbegone.refmap.json",
   "mixins": [
     "ChunkSerializerMixin",
-    "LeavesBlockMixin",
     "LevelChunkMixin",
     "ServerLevelMixin"
   ],

@@ -51,7 +51,7 @@ abstract class LevelChunkMixin extends ChunkAccess implements RandomBlockTickerC
 
     @Override
     public void leavesbegone$setRandomBlockTicks(LevelChunkTicks<Block> randomBlockTicks) {
-        Objects.requireNonNull(randomBlockTicks, "Leaf ticks was null");
+        Objects.requireNonNull(randomBlockTicks, "Random block ticks was null");
         this.leavesbegone$randomBlockTicks = randomBlockTicks;
     }
 
