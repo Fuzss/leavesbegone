@@ -16,7 +16,6 @@ import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.storage.WritableLevelData;
 import net.minecraft.world.ticks.LevelTicks;
 import net.minecraft.world.ticks.ScheduledTick;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -32,8 +31,7 @@ abstract class ServerLevelMixin extends Level implements RandomBlockTickerLevel 
     @Unique
     private final LevelTicks<Block> leavesbegone$randomBlockTicks = new LevelTicks<>(this::isPositionTickingWithEntitiesLoaded, this.getProfilerSupplier());
     @Unique
-    @Nullable
-    private BlockState leavesbegone$beforeTickState;
+    private boolean leavesbegone$leavesWereNotRandomlyTicking;
 
     protected ServerLevelMixin(WritableLevelData writableLevelData, ResourceKey<Level> resourceKey, Holder<DimensionType> holder, Supplier<ProfilerFiller> supplier, boolean bl, boolean bl2, long l, int i) {
         super(writableLevelData, resourceKey, holder, supplier, bl, bl2, l, i);
@@ -62,24 +60,18 @@ abstract class ServerLevelMixin extends Level implements RandomBlockTickerLevel 
     @Inject(method = "tickBlock", at = @At("HEAD"))
     private void leavesbegone$tickBlock$0(BlockPos pos, Block block, CallbackInfo callback) {
         BlockState state = this.getBlockState(pos);
-        if (state.is(block) && state.is(BlockTags.LEAVES)) {
-            this.leavesbegone$beforeTickState = state;
-        } else {
-            this.leavesbegone$beforeTickState = null;
-        }
+        this.leavesbegone$leavesWereNotRandomlyTicking = state.is(block) && state.is(BlockTags.LEAVES) && !state.isRandomlyTicking();
     }
 
     @Inject(method = "tickBlock", at = @At("TAIL"))
     private void leavesbegone$tickBlock$1(BlockPos pos, Block block, CallbackInfo callback) {
-        if (this.leavesbegone$beforeTickState == null) return;
         // only schedule when this has changed
-        if (this.getBlockState(pos).isRandomlyTicking() && !this.leavesbegone$beforeTickState.isRandomlyTicking()) {
-            ServerLevel level = (ServerLevel) (Object) this;
-            long gameTime = level.getLevelData().getGameTime();
+        if (this.leavesbegone$leavesWereNotRandomlyTicking && this.getBlockState(pos).isRandomlyTicking()) {
             int minimumDecayTicks = LeavesBeGone.CONFIG.get(ServerConfig.class).minimumDecayTicks;
             int maximumDecayTicks = LeavesBeGone.CONFIG.get(ServerConfig.class).maximumDecayTicks;
             int delay = minimumDecayTicks + this.random.nextInt(Math.max(1, maximumDecayTicks - minimumDecayTicks));
-            ((RandomBlockTickerLevel) level).leavesbegone$getRandomBlockTicks().schedule(new ScheduledTick<>(block, pos, gameTime + delay, level.nextSubTickCount()));
+            long gameTime = this.getLevelData().getGameTime();
+            this.leavesbegone$getRandomBlockTicks().schedule(new ScheduledTick<>(block, pos, gameTime + delay, this.nextSubTickCount()));
         }
     }
 }
