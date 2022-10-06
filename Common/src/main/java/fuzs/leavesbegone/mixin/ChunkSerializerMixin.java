@@ -25,7 +25,7 @@ abstract class ChunkSerializerMixin {
     @ModifyVariable(method = "read", at = @At(value = "STORE", ordinal = 0))
     private static ChunkAccess leavesbegone$read(ChunkAccess chunkAccess, ServerLevel level, PoiManager poiManager, ChunkPos pos, CompoundTag tag) {
         if (!(chunkAccess instanceof RandomBlockTickerChunk randomBlockTickerChunk)) return chunkAccess;
-        LevelChunkTicks<Block> levelchunkticks = LevelChunkTicks.load(tag.getList("random_block_ticks", Tag.TAG_COMPOUND), (p_188287_) -> {
+        LevelChunkTicks<Block> levelchunkticks = LevelChunkTicks.load(tag.getList("leavesbegone:random_block_ticks", Tag.TAG_COMPOUND), (p_188287_) -> {
             return Registry.BLOCK.getOptional(ResourceLocation.tryParse(p_188287_));
         }, pos);
         randomBlockTickerChunk.leavesbegone$setRandomBlockTicks(levelchunkticks);
@@ -36,7 +36,7 @@ abstract class ChunkSerializerMixin {
     private static void leavesbegone$write(ServerLevel level, ChunkAccess chunk, CallbackInfoReturnable<CompoundTag> callback, ChunkPos chunkpos, CompoundTag compoundtag) {
         if (!(chunk instanceof RandomBlockTickerChunk randomBlockTickerChunk)) return;
         long i = level.getLevelData().getGameTime();
-        compoundtag.put("random_block_ticks", randomBlockTickerChunk.leavesbegone$getRandomBlockTicks().save(i, (p_196894_) -> {
+        compoundtag.put("leavesbegone:random_block_ticks", randomBlockTickerChunk.leavesbegone$getRandomBlockTicks().save(i, (p_196894_) -> {
             return Registry.BLOCK.getKey(p_196894_).toString();
         }));
     }
