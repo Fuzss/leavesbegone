@@ -33,8 +33,8 @@ abstract class ServerLevelMixin extends Level implements RandomBlockTickerLevel 
     @Unique
     private boolean leavesbegone$leavesWereNotRandomlyTicking;
 
-    protected ServerLevelMixin(WritableLevelData writableLevelData, ResourceKey<Level> resourceKey, Holder<DimensionType> holder, Supplier<ProfilerFiller> supplier, boolean bl, boolean bl2, long l, int i) {
-        super(writableLevelData, resourceKey, holder, supplier, bl, bl2, l, i);
+    protected ServerLevelMixin(WritableLevelData writableLevelData, ResourceKey<Level> resourceKey, Holder<DimensionType> holder, Supplier<ProfilerFiller> supplier, boolean bl, boolean bl2, long l) {
+        super(writableLevelData, resourceKey, holder, supplier, bl, bl2, l);
     }
 
     @Override
