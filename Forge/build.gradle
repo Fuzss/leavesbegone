@@ -297,6 +297,7 @@ curseforge {
             displayName = "[FORGE] [${minecraftVersion}] ${rootProject.name}-v${modVersion}"
             relations {
                 requiredDependency 'puzzles-lib'
+                incompatible 'snowyleavesplus'
             }
         }
         addArtifact sourcesJar
@@ -324,6 +325,7 @@ modrinth {
     additionalFiles.add file("${project.buildDir}/libs/${project.archivesBaseName}-${project.version}-sources.jar")
     dependencies {
         required.project 'puzzles-lib'
+        incompatible.project 'snowyleavesplus'
     }
 //	debugMode = true
 }

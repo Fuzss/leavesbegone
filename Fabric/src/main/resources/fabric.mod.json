@@ -35,5 +35,9 @@
     "puzzleslib": ">=${minPuzzlesVersion}",
     "minecraft": ">=${minMinecraftVersion} <${nextMinecraftVersion}",
     "java": ">=17"
+  },
+
+  "breaks": {
+    "snowyleavesplus": "*"
   }
 }
