@@ -52,7 +52,7 @@ abstract class ServerLevelMixin extends Level implements RandomBlockTickerLevel 
         this.leavesbegone$randomBlockTicks.tick(this.getGameTime(), 65536, (BlockPos pos, Block block) -> {
             BlockState blockstate = this.getBlockState(pos);
             if (blockstate.is(block)) {
-                blockstate.randomTick((ServerLevel) (Object) this, pos, this.random);
+                blockstate.randomTick(ServerLevel.class.cast(this), pos, this.random);
             }
         });
     }
