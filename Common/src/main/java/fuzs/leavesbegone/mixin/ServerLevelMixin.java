@@ -5,6 +5,7 @@ import fuzs.leavesbegone.config.ServerConfig;
 import fuzs.leavesbegone.server.level.RandomBlockTickerLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
@@ -33,8 +34,8 @@ abstract class ServerLevelMixin extends Level implements RandomBlockTickerLevel 
     @Unique
     private boolean leavesbegone$leavesWereNotRandomlyTicking;
 
-    protected ServerLevelMixin(WritableLevelData writableLevelData, ResourceKey<Level> resourceKey, Holder<DimensionType> holder, Supplier<ProfilerFiller> supplier, boolean bl, boolean bl2, long l, int i) {
-        super(writableLevelData, resourceKey, holder, supplier, bl, bl2, l, i);
+    protected ServerLevelMixin(WritableLevelData writableLevelData, ResourceKey<Level> resourceKey, RegistryAccess registryAccess, Holder<DimensionType> holder, Supplier<ProfilerFiller> supplier, boolean bl, boolean bl2, long l, int i) {
+        super(writableLevelData, resourceKey, registryAccess, holder, supplier, bl, bl2, l, i);
     }
 
     @Override
