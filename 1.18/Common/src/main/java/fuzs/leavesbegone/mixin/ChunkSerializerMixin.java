@@ -2,7 +2,7 @@ package fuzs.leavesbegone.mixin;
 
 import fuzs.leavesbegone.LeavesBeGone;
 import fuzs.leavesbegone.world.level.chunk.RandomBlockTickerChunk;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
@@ -27,7 +27,7 @@ abstract class ChunkSerializerMixin {
     private static ChunkAccess leavesbegone$read(ChunkAccess chunkAccess, ServerLevel level, PoiManager poiManager, ChunkPos pos, CompoundTag tag) {
         if (!(chunkAccess instanceof RandomBlockTickerChunk randomBlockTickerChunk)) return chunkAccess;
         LevelChunkTicks<Block> levelchunkticks = LevelChunkTicks.load(tag.getList(LeavesBeGone.id("random_block_ticks").toString(), Tag.TAG_COMPOUND), (p_188287_) -> {
-            return BuiltInRegistries.BLOCK.getOptional(ResourceLocation.tryParse(p_188287_));
+            return Registry.BLOCK.getOptional(ResourceLocation.tryParse(p_188287_));
         }, pos);
         randomBlockTickerChunk.leavesbegone$setRandomBlockTicks(levelchunkticks);
         return chunkAccess;
@@ -38,7 +38,7 @@ abstract class ChunkSerializerMixin {
         if (!(chunk instanceof RandomBlockTickerChunk randomBlockTickerChunk)) return;
         long i = level.getLevelData().getGameTime();
         compoundtag.put(LeavesBeGone.id("random_block_ticks").toString(), randomBlockTickerChunk.leavesbegone$getRandomBlockTicks().save(i, (p_196894_) -> {
-            return BuiltInRegistries.BLOCK.getKey(p_196894_).toString();
+            return Registry.BLOCK.getKey(p_196894_).toString();
         }));
     }
 }

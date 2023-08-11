@@ -1,4 +1,4 @@
-package fuzs.examplemod.mixin;
+package fuzs.leavesbegone.mixin;
 
 import net.minecraftforge.fml.loading.FMLLoader;
 import org.objectweb.asm.tree.ClassNode;
