@@ -1,5 +1,6 @@
-package fuzs.leavesbegone;
+package fuzs.leavesbegone.fabric;
 
+import fuzs.leavesbegone.LeavesBeGone;
 import fuzs.puzzleslib.api.core.v1.ModConstructor;
 import net.fabricmc.api.ModInitializer;
 

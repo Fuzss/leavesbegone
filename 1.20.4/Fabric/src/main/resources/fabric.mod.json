@@ -9,7 +9,7 @@
   "authors": [
     "${modAuthor}"
   ],
-  
+
   "contact": {
     "homepage": "${modPageUrl}",
     "issues": "${modIssueUrl}",
@@ -26,11 +26,13 @@
       "${mainEntryPoint}"
     ],
     "client": [
+      "${clientEntryPoint}"
     ]
   },
 
   "mixins": [
-    "${modId}.common.mixins.json"
+    "${modId}.common.mixins.json",
+    "${modId}.fabric.mixins.json"
   ],
 
   "depends": {
@@ -39,10 +41,5 @@
     "puzzleslib": ">=${minPuzzlesVersion}",
     "minecraft": "${minecraftVersion}",
     "java": ">=17"
-  },
-
-  "breaks": {
-    "snowyleavesplus": "*",
-    "survivality": "*"
   }
 }

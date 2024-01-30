@@ -10,4 +10,6 @@ public class ServerConfig implements ConfigCore {
     @Config(description = "Maximum ticks it takes for leaves to decay.")
     @Config.IntRange(min = 0)
     public int maximumDecayTicks = 20;
+    @Config(description = "Leaves not attached to their own kind will decay. Does not work properly with trees that generate different leave blocks like azalea.")
+    public boolean ignoreOtherLeaveTypes = false;
 }
