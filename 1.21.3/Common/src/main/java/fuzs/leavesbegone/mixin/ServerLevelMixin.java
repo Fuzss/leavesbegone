@@ -1,5 +1,7 @@
 package fuzs.leavesbegone.mixin;
 
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
 import fuzs.leavesbegone.LeavesBeGone;
 import fuzs.leavesbegone.config.ServerConfig;
 import fuzs.leavesbegone.server.level.RandomBlockTickerLevel;
@@ -9,7 +11,6 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -25,17 +26,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
 
 @Mixin(ServerLevel.class)
 abstract class ServerLevelMixin extends Level implements RandomBlockTickerLevel {
     @Unique
-    private final LevelTicks<Block> leavesbegone$randomBlockTicks = new LevelTicks<>(this::isPositionTickingWithEntitiesLoaded, this.getProfilerSupplier());
-    @Unique
-    private boolean leavesbegone$leavesWereNotRandomlyTicking;
+    private final LevelTicks<Block> leavesbegone$randomBlockTicks = new LevelTicks<>(this::isPositionTickingWithEntitiesLoaded);
 
-    protected ServerLevelMixin(WritableLevelData writableLevelData, ResourceKey<Level> resourceKey, RegistryAccess registryAccess, Holder<DimensionType> holder, Supplier<ProfilerFiller> supplier, boolean bl, boolean bl2, long l, int i) {
-        super(writableLevelData, resourceKey, registryAccess, holder, supplier, bl, bl2, l, i);
+    protected ServerLevelMixin(WritableLevelData writableLevelData, ResourceKey<Level> resourceKey, RegistryAccess registryAccess, Holder<DimensionType> holder, boolean bl, boolean bl2, long l, int i) {
+        super(writableLevelData, resourceKey, registryAccess, holder, bl, bl2, l, i);
     }
 
     @Override
@@ -45,34 +43,45 @@ abstract class ServerLevelMixin extends Level implements RandomBlockTickerLevel 
 
     @Shadow
     private boolean isPositionTickingWithEntitiesLoaded(long l) {
-        throw new IllegalStateException();
+        throw new RuntimeException();
     }
 
-    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/ticks/LevelTicks;tick(JILjava/util/function/BiConsumer;)V", shift = At.Shift.AFTER, ordinal = 0))
-    public void leavesbegone$tick(BooleanSupplier pHasTimeLeft, CallbackInfo callback) {
+    @Inject(
+            method = "tick", at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/ticks/LevelTicks;tick(JILjava/util/function/BiConsumer;)V",
+            shift = At.Shift.AFTER,
+            ordinal = 0
+    )
+    )
+    public void tick(BooleanSupplier hasTimeLeft, CallbackInfo callback) {
         this.leavesbegone$randomBlockTicks.tick(this.getGameTime(), 65536, (BlockPos pos, Block block) -> {
-            BlockState blockstate = this.getBlockState(pos);
-            if (blockstate.is(block)) {
-                blockstate.randomTick(ServerLevel.class.cast(this), pos, this.random);
+            BlockState blockState = this.getBlockState(pos);
+            if (blockState.is(block)) {
+                blockState.randomTick(ServerLevel.class.cast(this), pos, this.random);
             }
         });
     }
 
     @Inject(method = "tickBlock", at = @At("HEAD"))
-    private void leavesbegone$tickBlock$0(BlockPos pos, Block block, CallbackInfo callback) {
-        BlockState state = this.getBlockState(pos);
-        this.leavesbegone$leavesWereNotRandomlyTicking = state.is(block) && state.is(BlockTags.LEAVES) && !state.isRandomlyTicking();
+    private void tickBlock$0(BlockPos pos, Block block, CallbackInfo callback, @Share("leavesWereNotRandomlyTicking") LocalBooleanRef leavesWereNotRandomlyTickingRef) {
+        BlockState blockState = this.getBlockState(pos);
+        leavesWereNotRandomlyTickingRef.set(
+                blockState.is(block) && blockState.is(BlockTags.LEAVES) && !blockState.isRandomlyTicking());
     }
 
     @Inject(method = "tickBlock", at = @At("TAIL"))
-    private void leavesbegone$tickBlock$1(BlockPos pos, Block block, CallbackInfo callback) {
+    private void tickBlock$1(BlockPos pos, Block block, CallbackInfo callback, @Share("leavesWereNotRandomlyTicking") LocalBooleanRef leavesWereNotRandomlyTickingRef) {
         // only schedule when this has changed
-        if (this.leavesbegone$leavesWereNotRandomlyTicking && this.getBlockState(pos).isRandomlyTicking()) {
+        if (leavesWereNotRandomlyTickingRef.get() && this.getBlockState(pos).isRandomlyTicking()) {
             int minimumDecayTicks = LeavesBeGone.CONFIG.get(ServerConfig.class).minimumDecayTicks;
             int maximumDecayTicks = LeavesBeGone.CONFIG.get(ServerConfig.class).maximumDecayTicks;
             int delay = minimumDecayTicks + this.random.nextInt(Math.max(1, maximumDecayTicks - minimumDecayTicks));
             long gameTime = this.getLevelData().getGameTime();
-            this.leavesbegone$getRandomBlockTicks().schedule(new ScheduledTick<>(block, pos, gameTime + delay, this.nextSubTickCount()));
+            this.leavesbegone$randomBlockTicks.schedule(new ScheduledTick<>(block,
+                    pos,
+                    gameTime + delay,
+                    this.nextSubTickCount()));
         }
     }
 }
