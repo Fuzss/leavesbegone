@@ -21,7 +21,7 @@ public class ModBlockTagProvider extends AbstractTagProvider<Block> {
     public void addTags(HolderLookup.Provider provider) {
         provider.lookupOrThrow(Registries.BLOCK).listElements().map(Holder.Reference::value).forEach((Block block) -> {
             if (block instanceof LeavesBlock) {
-                AbstractTagAppender<Block> tagAppender = this.add(LeavesDistanceHelper.createBlockTag(block))
+                AbstractTagAppender<Block> tagAppender = this.tag(LeavesDistanceHelper.createBlockTag(block))
                         .add(block);
                 if (block == Blocks.AZALEA_LEAVES) {
                     tagAppender.add(Blocks.FLOWERING_AZALEA_LEAVES);
