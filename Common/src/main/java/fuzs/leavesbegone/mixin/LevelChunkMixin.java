@@ -3,6 +3,7 @@ package fuzs.leavesbegone.mixin;
 import fuzs.leavesbegone.capability.RandomBlockTicksCapability;
 import fuzs.leavesbegone.init.ModRegistry;
 import fuzs.leavesbegone.server.level.RandomBlockTickerLevel;
+import fuzs.leavesbegone.world.level.chunk.RandomBlockTickerChunk;
 import net.minecraft.core.Registry;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
@@ -17,15 +18,36 @@ import net.minecraft.world.level.levelgen.blending.BlendingData;
 import net.minecraft.world.ticks.LevelChunkTicks;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Objects;
+
+/**
+ * Aggressive null checking is done as {@code null} values sometimes causes the game to hang without revealing anything
+ * in the log or producing a proper crash-report.
+ */
 @Mixin(LevelChunk.class)
-abstract class LevelChunkMixin extends ChunkAccess {
+abstract class LevelChunkMixin extends ChunkAccess implements RandomBlockTickerChunk {
+    @Unique
+    private LevelChunkTicks<Block> leavesbegone$randomBlockTicks = new LevelChunkTicks<>();
 
     public LevelChunkMixin(ChunkPos chunkPos, UpgradeData upgradeData, LevelHeightAccessor levelHeightAccessor, Registry<Biome> registry, long l, @Nullable LevelChunkSection[] levelChunkSections, @Nullable BlendingData blendingData) {
         super(chunkPos, upgradeData, levelHeightAccessor, registry, l, levelChunkSections, blendingData);
+    }
+
+    @Override
+    public LevelChunkTicks<Block> leavesbegone$getRandomBlockTicks() {
+        Objects.requireNonNull(this.leavesbegone$randomBlockTicks, "random block ticks is null");
+        return this.leavesbegone$randomBlockTicks;
+    }
+
+    @Override
+    public void leavesbegone$setRandomBlockTicks(LevelChunkTicks<Block> randomBlockTicks) {
+        Objects.requireNonNull(randomBlockTicks, "random block ticks is null");
+        this.leavesbegone$randomBlockTicks = randomBlockTicks;
     }
 
     @Inject(method = "unpackTicks", at = @At("TAIL"))

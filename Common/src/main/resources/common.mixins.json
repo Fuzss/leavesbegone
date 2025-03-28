@@ -6,6 +6,7 @@
   "mixins": [
     "LeavesBlockMixin",
     "LevelChunkMixin",
+    "SerializableChunkDataMixin",
     "ServerLevelMixin"
   ],
   "client": [
