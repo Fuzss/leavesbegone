@@ -1,7 +1,6 @@
 package fuzs.leavesbegone.mixin;
 
-import fuzs.leavesbegone.capability.RandomBlockTicksCapability;
-import fuzs.leavesbegone.init.ModRegistry;
+import fuzs.leavesbegone.attachment.SerializableLevelChunkTicks;
 import fuzs.leavesbegone.server.level.RandomBlockTickerLevel;
 import fuzs.leavesbegone.world.level.chunk.RandomBlockTickerChunk;
 import net.minecraft.core.Registry;
@@ -51,31 +50,26 @@ abstract class LevelChunkMixin extends ChunkAccess implements RandomBlockTickerC
     }
 
     @Inject(method = "unpackTicks", at = @At("TAIL"))
-    public void unpackTicks(long pos, CallbackInfo callback) {
-        ModRegistry.RANDOM_BLOCK_TICKS_CAPABILITY.getIfProvided(this)
-                .map(RandomBlockTicksCapability::getRandomBlockTicks)
-                .ifPresent((LevelChunkTicks<Block> ticks) -> {
-                    ticks.unpack(pos);
-                });
+    public void unpackTicks(long gameTime, CallbackInfo callback) {
+        this.leavesbegone$getRandomBlockTicks().unpack(gameTime);
     }
 
     @Inject(method = "registerTickContainerInLevel", at = @At("TAIL"))
     public void registerTickContainerInLevel(ServerLevel serverLevel, CallbackInfo callback) {
         if (!(serverLevel instanceof RandomBlockTickerLevel level)) return;
-        ModRegistry.RANDOM_BLOCK_TICKS_CAPABILITY.getIfProvided(this)
-                .map(RandomBlockTicksCapability::getRandomBlockTicks)
-                .ifPresent((LevelChunkTicks<Block> ticks) -> {
-                    level.leavesbegone$getRandomBlockTicks().addContainer(this.chunkPos, ticks);
-                });
+        LevelChunkTicks<Block> randomBlockTicks = SerializableLevelChunkTicks.loadTickContainerInLevel(LevelChunk.class.cast(
+                this));
+        if (randomBlockTicks != null) {
+            this.leavesbegone$setRandomBlockTicks(randomBlockTicks);
+        } else {
+            randomBlockTicks = this.leavesbegone$getRandomBlockTicks();
+        }
+        level.leavesbegone$getRandomBlockTicks().addContainer(this.chunkPos, randomBlockTicks);
     }
 
     @Inject(method = "unregisterTickContainerFromLevel", at = @At("TAIL"))
     public void unregisterTickContainerFromLevel(ServerLevel serverLevel, CallbackInfo callback) {
         if (!(serverLevel instanceof RandomBlockTickerLevel level)) return;
-        ModRegistry.RANDOM_BLOCK_TICKS_CAPABILITY.getIfProvided(this)
-                .map(RandomBlockTicksCapability::getRandomBlockTicks)
-                .ifPresent((LevelChunkTicks<Block> ticks) -> {
-                    level.leavesbegone$getRandomBlockTicks().removeContainer(this.chunkPos);
-                });
+        level.leavesbegone$getRandomBlockTicks().removeContainer(this.chunkPos);
     }
 }
