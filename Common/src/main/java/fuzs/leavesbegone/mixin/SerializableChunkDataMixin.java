@@ -1,6 +1,6 @@
 package fuzs.leavesbegone.mixin;
 
-import fuzs.leavesbegone.attachment.SerializableLevelChunkTicks;
+import fuzs.leavesbegone.helper.PackedTicksHelper;
 import fuzs.leavesbegone.world.level.chunk.RandomBlockTickerChunk;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.chunk.ChunkAccess;
@@ -18,7 +18,7 @@ abstract class SerializableChunkDataMixin {
     private static void copyOf(ServerLevel level, ChunkAccess chunkAccess, CallbackInfoReturnable<SerializableChunkData> callback) {
         if (!(chunkAccess instanceof RandomBlockTickerChunk chunk)) return;
         // random block ticks are only saved right before serialization, so that we can choose to only stored them when not empty
-        SerializableLevelChunkTicks.saveTickContainerFromLevel((LevelChunk) chunkAccess,
+        PackedTicksHelper.saveTickContainerFromLevel((LevelChunk) chunkAccess,
                 chunk.leavesbegone$getRandomBlockTicks());
     }
 }
