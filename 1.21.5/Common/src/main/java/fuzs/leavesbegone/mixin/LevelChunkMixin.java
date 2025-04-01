@@ -1,6 +1,6 @@
 package fuzs.leavesbegone.mixin;
 
-import fuzs.leavesbegone.attachment.SerializableLevelChunkTicks;
+import fuzs.leavesbegone.helper.PackedTicksHelper;
 import fuzs.leavesbegone.server.level.RandomBlockTickerLevel;
 import fuzs.leavesbegone.world.level.chunk.RandomBlockTickerChunk;
 import net.minecraft.core.Registry;
@@ -57,8 +57,7 @@ abstract class LevelChunkMixin extends ChunkAccess implements RandomBlockTickerC
     @Inject(method = "registerTickContainerInLevel", at = @At("TAIL"))
     public void registerTickContainerInLevel(ServerLevel serverLevel, CallbackInfo callback) {
         if (!(serverLevel instanceof RandomBlockTickerLevel level)) return;
-        LevelChunkTicks<Block> randomBlockTicks = SerializableLevelChunkTicks.loadTickContainerInLevel(LevelChunk.class.cast(
-                this));
+        LevelChunkTicks<Block> randomBlockTicks = PackedTicksHelper.loadTickContainerInLevel(LevelChunk.class.cast(this));
         if (randomBlockTicks != null) {
             this.leavesbegone$setRandomBlockTicks(randomBlockTicks);
         } else {
