@@ -1,8 +1,9 @@
 package fuzs.leavesbegone.mixin;
 
-import fuzs.leavesbegone.attachment.SerializableLevelChunkTicks;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import fuzs.leavesbegone.server.level.RandomBlockTickerLevel;
 import fuzs.leavesbegone.world.level.chunk.RandomBlockTickerChunk;
+import fuzs.leavesbegone.world.level.chunk.RandomBlockTickerPackedTicks;
 import net.minecraft.core.Registry;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
@@ -57,19 +58,19 @@ abstract class LevelChunkMixin extends ChunkAccess implements RandomBlockTickerC
     @Inject(method = "registerTickContainerInLevel", at = @At("TAIL"))
     public void registerTickContainerInLevel(ServerLevel serverLevel, CallbackInfo callback) {
         if (!(serverLevel instanceof RandomBlockTickerLevel level)) return;
-        LevelChunkTicks<Block> randomBlockTicks = SerializableLevelChunkTicks.loadTickContainerInLevel(LevelChunk.class.cast(
-                this));
-        if (randomBlockTicks != null) {
-            this.leavesbegone$setRandomBlockTicks(randomBlockTicks);
-        } else {
-            randomBlockTicks = this.leavesbegone$getRandomBlockTicks();
-        }
-        level.leavesbegone$getRandomBlockTicks().addContainer(this.chunkPos, randomBlockTicks);
+        level.leavesbegone$getRandomBlockTicks().addContainer(this.chunkPos, this.leavesbegone$getRandomBlockTicks());
     }
 
     @Inject(method = "unregisterTickContainerFromLevel", at = @At("TAIL"))
     public void unregisterTickContainerFromLevel(ServerLevel serverLevel, CallbackInfo callback) {
         if (!(serverLevel instanceof RandomBlockTickerLevel level)) return;
         level.leavesbegone$getRandomBlockTicks().removeContainer(this.chunkPos);
+    }
+
+    @ModifyReturnValue(method = "getTicksForSerialization", at = @At("TAIL"))
+    public PackedTicks getTicksForSerialization(PackedTicks packedTicks, long gametime) {
+        RandomBlockTickerPackedTicks.class.cast(packedTicks)
+                .leavesbegone$setRandomBlocks(this.leavesbegone$getRandomBlockTicks().pack(gametime));
+        return packedTicks;
     }
 }

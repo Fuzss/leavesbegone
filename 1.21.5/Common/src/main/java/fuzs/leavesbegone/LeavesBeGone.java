@@ -7,6 +7,7 @@ import fuzs.puzzleslib.api.core.v1.ModConstructor;
 import fuzs.puzzleslib.api.core.v1.utility.ResourceLocationHelper;
 import fuzs.puzzleslib.api.event.v1.level.ServerChunkEvents;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.chunk.LevelChunk;
 import org.slf4j.Logger;
@@ -25,10 +26,14 @@ public class LeavesBeGone implements ModConstructor {
         registerEventHandlers();
     }
 
+    @Deprecated
     private static void registerEventHandlers() {
-        // do this after SerializableLevelChunkTicks::loadTickContainerInLevel, so we do not write to chunk data while it is being loaded
         ServerChunkEvents.LOAD.register((ServerLevel serverLevel, LevelChunk levelChunk) -> {
-            ModRegistry.RANDOM_BLOCK_TICKS_ATTACHMENT_TYPE.set(levelChunk, null);
+            serverLevel.getServer().schedule(new TickTask(0, () -> {
+                if (ModRegistry.RANDOM_BLOCK_TICKS_ATTACHMENT_TYPE.has(levelChunk)) {
+                    ModRegistry.RANDOM_BLOCK_TICKS_ATTACHMENT_TYPE.set(levelChunk, null);
+                }
+            }));
         });
     }
 
