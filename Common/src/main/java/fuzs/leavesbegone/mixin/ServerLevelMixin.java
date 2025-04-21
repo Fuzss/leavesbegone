@@ -55,10 +55,10 @@ abstract class ServerLevelMixin extends Level implements RandomBlockTickerLevel 
     )
     )
     public void tick(BooleanSupplier hasTimeLeft, CallbackInfo callback) {
-        this.leavesbegone$randomBlockTicks.tick(this.getGameTime(), 65536, (BlockPos pos, Block block) -> {
-            BlockState blockState = this.getBlockState(pos);
+        this.leavesbegone$getRandomBlockTicks().tick(this.getGameTime(), 65536, (BlockPos blockPos, Block block) -> {
+            BlockState blockState = this.getBlockState(blockPos);
             if (blockState.is(block)) {
-                blockState.randomTick(ServerLevel.class.cast(this), pos, this.random);
+                blockState.randomTick(ServerLevel.class.cast(this), blockPos, this.random);
             }
         });
     }
@@ -78,10 +78,8 @@ abstract class ServerLevelMixin extends Level implements RandomBlockTickerLevel 
             int maximumDecayTicks = LeavesBeGone.CONFIG.get(ServerConfig.class).maximumDecayTicks;
             int delay = minimumDecayTicks + this.random.nextInt(Math.max(1, maximumDecayTicks - minimumDecayTicks));
             long gameTime = this.getLevelData().getGameTime();
-            this.leavesbegone$randomBlockTicks.schedule(new ScheduledTick<>(block,
-                    pos,
-                    gameTime + delay,
-                    this.nextSubTickCount()));
+            this.leavesbegone$getRandomBlockTicks()
+                    .schedule(new ScheduledTick<>(block, pos, gameTime + delay, this.nextSubTickCount()));
         }
     }
 }
