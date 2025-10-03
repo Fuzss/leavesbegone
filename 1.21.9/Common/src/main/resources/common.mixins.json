@@ -7,7 +7,6 @@
     "ChunkAccess\u0024PackedTicksMixin",
     "LeavesBlockMixin",
     "LevelChunkMixin",
-    "SerializableChunkDataMixin",
     "ServerLevelMixin"
   ],
   "client": [
