@@ -1,4 +1,4 @@
-package fuzs.leavesbegone.mixin;
+package fuzs.leavesbegone.neoforge.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.serialization.Codec;
@@ -27,8 +27,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 
+/**
+ * Copied from Common, otherwise currently leads to an exception during start-up on NeoForge:
+ * {@link org.spongepowered.asm.mixin.transformer.throwables.ReEntrantTransformerError ReEntrantTransformerError:
+ * Re-entrance error}
+ *
+ * @see fuzs.leavesbegone.mixin.SerializableChunkDataMixin
+ */
 @Mixin(SerializableChunkData.class)
-abstract class SerializableChunkDataMixin {
+abstract class SerializableChunkDataNeoForgeMixin {
     @Shadow
     @Final
     private static Codec<List<SavedTick<Block>>> BLOCK_TICKS_CODEC;

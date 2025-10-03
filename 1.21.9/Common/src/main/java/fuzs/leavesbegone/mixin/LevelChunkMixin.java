@@ -4,16 +4,11 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import fuzs.leavesbegone.server.level.RandomBlockTickerLevel;
 import fuzs.leavesbegone.world.level.chunk.RandomBlockTickerChunk;
 import fuzs.leavesbegone.world.level.chunk.RandomBlockTickerPackedTicks;
-import net.minecraft.core.Registry;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.chunk.ChunkAccess;
-import net.minecraft.world.level.chunk.LevelChunk;
-import net.minecraft.world.level.chunk.LevelChunkSection;
-import net.minecraft.world.level.chunk.UpgradeData;
+import net.minecraft.world.level.chunk.*;
 import net.minecraft.world.level.levelgen.blending.BlendingData;
 import net.minecraft.world.ticks.LevelChunkTicks;
 import org.jetbrains.annotations.Nullable;
@@ -34,8 +29,14 @@ abstract class LevelChunkMixin extends ChunkAccess implements RandomBlockTickerC
     @Unique
     private LevelChunkTicks<Block> leavesbegone$randomBlockTicks = new LevelChunkTicks<>();
 
-    public LevelChunkMixin(ChunkPos chunkPos, UpgradeData upgradeData, LevelHeightAccessor levelHeightAccessor, Registry<Biome> registry, long l, @Nullable LevelChunkSection[] levelChunkSections, @Nullable BlendingData blendingData) {
-        super(chunkPos, upgradeData, levelHeightAccessor, registry, l, levelChunkSections, blendingData);
+    public LevelChunkMixin(ChunkPos chunkPos, UpgradeData upgradeData, LevelHeightAccessor levelHeightAccessor, PalettedContainerFactory palettedContainerFactory, long l, @Nullable LevelChunkSection[] levelChunkSections, @Nullable BlendingData blendingData) {
+        super(chunkPos,
+                upgradeData,
+                levelHeightAccessor,
+                palettedContainerFactory,
+                l,
+                levelChunkSections,
+                blendingData);
     }
 
     @Override
