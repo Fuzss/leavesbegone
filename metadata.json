@@ -1,0 +1,61 @@
+{
+    "mod": {
+        "id": "leavesbegone",
+        "group": "fuzs.leavesbegone",
+        "name": "Leaves Be Gone",
+        "version": "21.11.0",
+        "authors": [
+            "Fuzs"
+        ],
+        "description": "Quick leaf decay from cutting down trees. Built for great performance and mod compat!",
+        "license": "MPL-2.0"
+    },
+    "dependencies": [
+        {
+            "name": "fabricapi",
+            "type": "required",
+            "platforms": [
+                "fabric"
+            ]
+        },
+        {
+            "name": "forgeconfigapiport",
+            "type": "required",
+            "platforms": [
+                "fabric"
+            ]
+        },
+        {
+            "name": "puzzleslib",
+            "type": "required",
+            "platforms": [
+                "fabric",
+                "neoforge"
+            ]
+        }
+    ],
+    "links": [
+        {
+            "name": "curseforge",
+            "slug": "leaves-be-gone",
+            "id": "686435"
+        },
+        {
+            "name": "github",
+            "slug": "leavesbegone"
+        },
+        {
+            "name": "modrinth",
+            "slug": "leaves-be-gone",
+            "id": "AVq17PqV"
+        }
+    ],
+    "environments": {
+        "client": "required",
+        "server": "required"
+    },
+    "platforms": [
+        "fabric",
+        "neoforge"
+    ]
+}
