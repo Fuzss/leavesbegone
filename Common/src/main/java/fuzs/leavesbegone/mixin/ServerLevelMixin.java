@@ -29,8 +29,7 @@ import java.util.function.BooleanSupplier;
 
 @Mixin(ServerLevel.class)
 abstract class ServerLevelMixin extends Level implements RandomBlockTickerLevel {
-    @Unique
-    private final LevelTicks<Block> leavesbegone$randomBlockTicks = new LevelTicks<>(this::isPositionTickingWithEntitiesLoaded);
+    @Unique private final LevelTicks<Block> leavesbegone$randomBlockTicks = new LevelTicks<>(this::isPositionTickingWithEntitiesLoaded);
 
     protected ServerLevelMixin(WritableLevelData writableLevelData, ResourceKey<Level> resourceKey, RegistryAccess registryAccess, Holder<DimensionType> holder, boolean bl, boolean bl2, long l, int i) {
         super(writableLevelData, resourceKey, registryAccess, holder, bl, bl2, l, i);
