@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.chunk.*;
 import net.minecraft.world.level.levelgen.blending.BlendingData;
 import net.minecraft.world.ticks.LevelChunkTicks;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,8 +26,7 @@ import java.util.Objects;
  */
 @Mixin(LevelChunk.class)
 abstract class LevelChunkMixin extends ChunkAccess implements RandomBlockTickerChunk {
-    @Unique
-    private LevelChunkTicks<Block> leavesbegone$randomBlockTicks = new LevelChunkTicks<>();
+    @Unique private LevelChunkTicks<Block> leavesbegone$randomBlockTicks = new LevelChunkTicks<>();
 
     public LevelChunkMixin(ChunkPos chunkPos, UpgradeData upgradeData, LevelHeightAccessor levelHeightAccessor, PalettedContainerFactory palettedContainerFactory, long l, @Nullable LevelChunkSection[] levelChunkSections, @Nullable BlendingData blendingData) {
         super(chunkPos,

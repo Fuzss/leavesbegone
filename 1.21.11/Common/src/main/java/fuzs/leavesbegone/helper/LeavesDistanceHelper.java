@@ -1,8 +1,10 @@
 package fuzs.leavesbegone.helper;
 
 import fuzs.leavesbegone.LeavesBeGone;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
@@ -37,8 +39,10 @@ public final class LeavesDistanceHelper {
     }
 
     public static TagKey<Block> createBlockTag(Block block) {
-        ResourceLocation resourceLocation = block.builtInRegistryHolder().key().location();
-        return TagKey.create(Registries.BLOCK,
-                LeavesBeGone.id(resourceLocation.getNamespace() + "/" + resourceLocation.getPath()));
+        Identifier identifier = BuiltInRegistries.BLOCK.wrapAsHolder(block)
+                .unwrapKey()
+                .map(ResourceKey::identifier)
+                .orElseThrow();
+        return TagKey.create(Registries.BLOCK, LeavesBeGone.id(identifier.getNamespace() + "/" + identifier.getPath()));
     }
 }
