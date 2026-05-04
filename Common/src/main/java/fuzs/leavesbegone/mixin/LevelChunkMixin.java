@@ -26,7 +26,8 @@ import java.util.Objects;
  */
 @Mixin(LevelChunk.class)
 abstract class LevelChunkMixin extends ChunkAccess implements RandomBlockTickerChunk {
-    @Unique private LevelChunkTicks<Block> leavesbegone$randomBlockTicks = new LevelChunkTicks<>();
+    @Unique
+    private LevelChunkTicks<Block> leavesbegone$randomBlockTicks = new LevelChunkTicks<>();
 
     public LevelChunkMixin(ChunkPos chunkPos, UpgradeData upgradeData, LevelHeightAccessor levelHeightAccessor, PalettedContainerFactory palettedContainerFactory, long l, @Nullable LevelChunkSection[] levelChunkSections, @Nullable BlendingData blendingData) {
         super(chunkPos,
@@ -51,26 +52,33 @@ abstract class LevelChunkMixin extends ChunkAccess implements RandomBlockTickerC
     }
 
     @Inject(method = "unpackTicks", at = @At("TAIL"))
-    public void unpackTicks(long gameTime, CallbackInfo callback) {
-        this.leavesbegone$getRandomBlockTicks().unpack(gameTime);
+    public void unpackTicks(long currentTick, CallbackInfo callback) {
+        this.leavesbegone$getRandomBlockTicks().unpack(currentTick);
     }
 
     @Inject(method = "registerTickContainerInLevel", at = @At("TAIL"))
-    public void registerTickContainerInLevel(ServerLevel serverLevel, CallbackInfo callback) {
-        if (!(serverLevel instanceof RandomBlockTickerLevel level)) return;
-        level.leavesbegone$getRandomBlockTicks().addContainer(this.chunkPos, this.leavesbegone$getRandomBlockTicks());
+    public void registerTickContainerInLevel(ServerLevel level, CallbackInfo callback) {
+        if (!(level instanceof RandomBlockTickerLevel tickerLevel)) {
+            return;
+        }
+
+        tickerLevel.leavesbegone$getRandomBlockTicks()
+                .addContainer(this.chunkPos, this.leavesbegone$getRandomBlockTicks());
     }
 
     @Inject(method = "unregisterTickContainerFromLevel", at = @At("TAIL"))
-    public void unregisterTickContainerFromLevel(ServerLevel serverLevel, CallbackInfo callback) {
-        if (!(serverLevel instanceof RandomBlockTickerLevel level)) return;
-        level.leavesbegone$getRandomBlockTicks().removeContainer(this.chunkPos);
+    public void unregisterTickContainerFromLevel(ServerLevel level, CallbackInfo callback) {
+        if (!(level instanceof RandomBlockTickerLevel tickerLevel)) {
+            return;
+        }
+
+        tickerLevel.leavesbegone$getRandomBlockTicks().removeContainer(this.chunkPos);
     }
 
     @ModifyReturnValue(method = "getTicksForSerialization", at = @At("TAIL"))
-    public ChunkAccess.PackedTicks getTicksForSerialization(ChunkAccess.PackedTicks packedTicks, long gametime) {
+    public ChunkAccess.PackedTicks getTicksForSerialization(ChunkAccess.PackedTicks packedTicks, long currentTick) {
         RandomBlockTickerPackedTicks.class.cast(packedTicks)
-                .leavesbegone$setRandomBlocks(this.leavesbegone$getRandomBlockTicks().pack(gametime));
+                .leavesbegone$setRandomBlocks(this.leavesbegone$getRandomBlockTicks().pack(currentTick));
         return packedTicks;
     }
 }

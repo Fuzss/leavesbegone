@@ -24,25 +24,25 @@ abstract class LeavesBlockMixin extends Block {
         super(properties);
     }
 
-    @ModifyExpressionValue(
-            method = "updateShape", at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/level/block/LeavesBlock;getDistanceAt(Lnet/minecraft/world/level/block/state/BlockState;)I"
-    )
-    )
-    public int updateShape(int distanceAt, BlockState blockState, LevelReader levelReader, ScheduledTickAccess scheduledTickAccess, BlockPos blockPos, Direction direction, BlockPos neighborPos, BlockState neighborState, RandomSource randomSource) {
-        if (!LeavesBeGone.CONFIG.get(ServerConfig.class).ignoreOtherLeaveTypes) return distanceAt;
-        return LeavesDistanceHelper.updateDistance(blockState, neighborState, distanceAt);
+    @ModifyExpressionValue(method = "updateShape",
+                           at = @At(value = "INVOKE",
+                                    target = "Lnet/minecraft/world/level/block/LeavesBlock;getDistanceAt(Lnet/minecraft/world/level/block/state/BlockState;)I"))
+    public int updateShape(int distanceAt, BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction directionToNeighbour, BlockPos neighbourPos, BlockState neighbourState, RandomSource random) {
+        if (!LeavesBeGone.CONFIG.get(ServerConfig.class).ignoreOtherLeaveTypes) {
+            return distanceAt;
+        }
+
+        return LeavesDistanceHelper.updateDistance(state, neighbourState, distanceAt);
     }
 
-    @ModifyExpressionValue(
-            method = "updateDistance", at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/level/block/LeavesBlock;getDistanceAt(Lnet/minecraft/world/level/block/state/BlockState;)I"
-    )
-    )
-    private static int updateDistance(int distanceAt, BlockState blockState, LevelAccessor level, BlockPos pos, @Local BlockPos.MutableBlockPos mutableBlockPos) {
-        if (!LeavesBeGone.CONFIG.get(ServerConfig.class).ignoreOtherLeaveTypes) return distanceAt;
-        return LeavesDistanceHelper.updateDistance(blockState, level.getBlockState(mutableBlockPos), distanceAt);
+    @ModifyExpressionValue(method = "updateDistance",
+                           at = @At(value = "INVOKE",
+                                    target = "Lnet/minecraft/world/level/block/LeavesBlock;getDistanceAt(Lnet/minecraft/world/level/block/state/BlockState;)I"))
+    private static int updateDistance(int distanceAt, BlockState state, LevelAccessor level, BlockPos pos, @Local BlockPos.MutableBlockPos neighborPos) {
+        if (!LeavesBeGone.CONFIG.get(ServerConfig.class).ignoreOtherLeaveTypes) {
+            return distanceAt;
+        }
+
+        return LeavesDistanceHelper.updateDistance(state, level.getBlockState(neighborPos), distanceAt);
     }
 }

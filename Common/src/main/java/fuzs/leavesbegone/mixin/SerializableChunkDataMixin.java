@@ -37,28 +37,28 @@ abstract class SerializableChunkDataMixin {
     private ChunkAccess.PackedTicks packedTicks;
 
     @ModifyVariable(method = "parse", at = @At("STORE"))
-    private static ChunkAccess.PackedTicks parse(ChunkAccess.PackedTicks ticks, LevelHeightAccessor levelHeightAccessor, PalettedContainerFactory palettedContainerFactory, CompoundTag compoundTag, @Local ChunkPos chunkPos) {
-        List<SavedTick<Block>> list = SavedTick.filterTickListForChunk(compoundTag.read(LeavesBeGone.id(
+    private static ChunkAccess.PackedTicks parse(ChunkAccess.PackedTicks packedTicks, LevelHeightAccessor levelHeight, PalettedContainerFactory containerFactory, CompoundTag chunkData, @Local ChunkPos chunkPos) {
+        List<SavedTick<Block>> list = SavedTick.filterTickListForChunk(chunkData.read(LeavesBeGone.id(
                 "random_block_ticks").toString(), BLOCK_TICKS_CODEC).orElse(List.of()), chunkPos);
-        RandomBlockTickerPackedTicks.class.cast(ticks).leavesbegone$setRandomBlocks(list);
-        return ticks;
+        RandomBlockTickerPackedTicks.class.cast(packedTicks).leavesbegone$setRandomBlocks(list);
+        return packedTicks;
     }
 
     @ModifyVariable(method = "read", at = @At("STORE"))
-    public ChunkAccess read(ChunkAccess chunkAccess, ServerLevel serverLevel, PoiManager poiManager, RegionStorageInfo regionStorageInfo, ChunkPos chunkPos) {
-        if (chunkAccess instanceof RandomBlockTickerChunk chunk) {
-            chunk.leavesbegone$setRandomBlockTicks(new LevelChunkTicks<>(RandomBlockTickerPackedTicks.class.cast(this.packedTicks)
-                    .leavesbegone$getRandomBlocks()));
-            return chunkAccess;
+    public ChunkAccess read(ChunkAccess chunk, ServerLevel level, PoiManager poiManager, RegionStorageInfo regionInfo, ChunkPos pos) {
+        if (chunk instanceof RandomBlockTickerChunk tickerChunk) {
+            tickerChunk.leavesbegone$setRandomBlockTicks(new LevelChunkTicks<>(RandomBlockTickerPackedTicks.class.cast(
+                    this.packedTicks).leavesbegone$getRandomBlocks()));
+            return chunk;
         } else {
-            return chunkAccess;
+            return chunk;
         }
     }
 
     @Inject(method = "saveTicks", at = @At("TAIL"))
-    private static void saveTicks(CompoundTag tag, ChunkAccess.PackedTicks ticks, CallbackInfo callback) {
-        tag.storeNullable(LeavesBeGone.id("random_block_ticks").toString(),
+    private static void saveTicks(CompoundTag levelData, ChunkAccess.PackedTicks ticksForSerialization, CallbackInfo callback) {
+        levelData.storeNullable(LeavesBeGone.id("random_block_ticks").toString(),
                 BLOCK_TICKS_CODEC,
-                RandomBlockTickerPackedTicks.class.cast(ticks).leavesbegone$getRandomBlocks());
+                RandomBlockTickerPackedTicks.class.cast(ticksForSerialization).leavesbegone$getRandomBlocks());
     }
 }

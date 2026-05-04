@@ -2,7 +2,7 @@ package fuzs.leavesbegone.fabric.client;
 
 import fuzs.leavesbegone.LeavesBeGone;
 import fuzs.leavesbegone.client.LeavesBeGoneClient;
-import fuzs.puzzleslib.api.client.core.v1.ClientModConstructor;
+import fuzs.puzzleslib.common.api.client.core.v1.ClientModConstructor;
 import net.fabricmc.api.ClientModInitializer;
 
 public class LeavesBeGoneFabricClient implements ClientModInitializer {

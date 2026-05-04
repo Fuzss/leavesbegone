@@ -2,9 +2,9 @@ package fuzs.leavesbegone;
 
 import fuzs.leavesbegone.config.ServerConfig;
 import fuzs.leavesbegone.init.ModRegistry;
-import fuzs.puzzleslib.api.config.v3.ConfigHolder;
-import fuzs.puzzleslib.api.core.v1.ModConstructor;
-import fuzs.puzzleslib.api.event.v1.level.ServerChunkEvents;
+import fuzs.puzzleslib.common.api.config.v3.ConfigHolder;
+import fuzs.puzzleslib.common.api.core.v1.ModConstructor;
+import fuzs.puzzleslib.common.api.event.v1.level.ServerChunkEvents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
@@ -27,7 +27,7 @@ public class LeavesBeGone implements ModConstructor {
 
     @Deprecated
     private static void registerEventHandlers() {
-        ServerChunkEvents.LOAD.register((ServerLevel serverLevel, LevelChunk levelChunk) -> {
+        ServerChunkEvents.LOAD.register((ServerLevel serverLevel, LevelChunk levelChunk, boolean isNewlyGenerated) -> {
             serverLevel.getServer().schedule(new TickTask(0, () -> {
                 if (ModRegistry.RANDOM_BLOCK_TICKS_ATTACHMENT_TYPE.has(levelChunk)) {
                     ModRegistry.RANDOM_BLOCK_TICKS_ATTACHMENT_TYPE.set(levelChunk, null);

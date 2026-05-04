@@ -1,8 +1,8 @@
 package fuzs.leavesbegone.init;
 
 import fuzs.leavesbegone.LeavesBeGone;
-import fuzs.puzzleslib.api.attachment.v4.DataAttachmentRegistry;
-import fuzs.puzzleslib.api.attachment.v4.DataAttachmentType;
+import fuzs.puzzleslib.common.api.attachment.v4.DataAttachmentRegistry;
+import fuzs.puzzleslib.common.api.attachment.v4.DataAttachmentType;
 import net.minecraft.util.Unit;
 import net.minecraft.world.level.chunk.LevelChunk;
 

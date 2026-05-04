@@ -11,7 +11,8 @@ import java.util.List;
 
 @Mixin(ChunkAccess.PackedTicks.class)
 abstract class ChunkAccess$PackedTicksMixin implements RandomBlockTickerPackedTicks {
-    @Unique private List<SavedTick<Block>> leavesbegone$randomBlocks;
+    @Unique
+    private List<SavedTick<Block>> leavesbegone$randomBlocks;
 
     @Override
     public List<SavedTick<Block>> leavesbegone$getRandomBlocks() {
