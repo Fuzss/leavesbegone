@@ -1,4 +1,4 @@
-package fuzs.leavesbegone.client;
+package fuzs.leavesbegone.common.client;
 
 import fuzs.puzzleslib.common.api.client.core.v1.ClientModConstructor;
 

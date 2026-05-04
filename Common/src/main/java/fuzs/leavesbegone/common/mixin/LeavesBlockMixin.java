@@ -1,10 +1,10 @@
-package fuzs.leavesbegone.mixin;
+package fuzs.leavesbegone.common.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import fuzs.leavesbegone.LeavesBeGone;
-import fuzs.leavesbegone.config.ServerConfig;
-import fuzs.leavesbegone.helper.LeavesDistanceHelper;
+import fuzs.leavesbegone.common.LeavesBeGone;
+import fuzs.leavesbegone.common.config.ServerConfig;
+import fuzs.leavesbegone.common.helper.LeavesDistanceHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;

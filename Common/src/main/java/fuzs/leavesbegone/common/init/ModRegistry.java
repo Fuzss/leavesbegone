@@ -1,6 +1,6 @@
-package fuzs.leavesbegone.init;
+package fuzs.leavesbegone.common.init;
 
-import fuzs.leavesbegone.LeavesBeGone;
+import fuzs.leavesbegone.common.LeavesBeGone;
 import fuzs.puzzleslib.common.api.attachment.v4.DataAttachmentRegistry;
 import fuzs.puzzleslib.common.api.attachment.v4.DataAttachmentType;
 import net.minecraft.util.Unit;

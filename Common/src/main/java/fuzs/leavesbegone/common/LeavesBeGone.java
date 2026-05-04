@@ -1,7 +1,7 @@
-package fuzs.leavesbegone;
+package fuzs.leavesbegone.common;
 
-import fuzs.leavesbegone.config.ServerConfig;
-import fuzs.leavesbegone.init.ModRegistry;
+import fuzs.leavesbegone.common.config.ServerConfig;
+import fuzs.leavesbegone.common.init.ModRegistry;
 import fuzs.puzzleslib.common.api.config.v3.ConfigHolder;
 import fuzs.puzzleslib.common.api.core.v1.ModConstructor;
 import fuzs.puzzleslib.common.api.event.v1.level.ServerChunkEvents;
@@ -25,6 +25,10 @@ public class LeavesBeGone implements ModConstructor {
         registerEventHandlers();
     }
 
+    /**
+     * Only kept for legacy versions, so that the attachment can properly be removed without needlessly logging a bunch
+     * of warnings every time the chunks load.
+     */
     @Deprecated
     private static void registerEventHandlers() {
         ServerChunkEvents.LOAD.register((ServerLevel serverLevel, LevelChunk levelChunk, boolean isNewlyGenerated) -> {

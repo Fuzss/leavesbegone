@@ -1,4 +1,4 @@
-package fuzs.leavesbegone.world.level.chunk;
+package fuzs.leavesbegone.common.world.level.chunk;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.ticks.LevelChunkTicks;

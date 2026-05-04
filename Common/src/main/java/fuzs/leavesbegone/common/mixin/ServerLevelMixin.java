@@ -1,10 +1,10 @@
-package fuzs.leavesbegone.mixin;
+package fuzs.leavesbegone.common.mixin;
 
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
-import fuzs.leavesbegone.LeavesBeGone;
-import fuzs.leavesbegone.config.ServerConfig;
-import fuzs.leavesbegone.server.level.RandomBlockTickerLevel;
+import fuzs.leavesbegone.common.LeavesBeGone;
+import fuzs.leavesbegone.common.config.ServerConfig;
+import fuzs.leavesbegone.common.server.level.RandomBlockTickerLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;

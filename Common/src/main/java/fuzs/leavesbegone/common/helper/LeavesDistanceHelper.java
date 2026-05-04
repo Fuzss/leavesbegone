@@ -1,6 +1,6 @@
-package fuzs.leavesbegone.helper;
+package fuzs.leavesbegone.common.helper;
 
-import fuzs.leavesbegone.LeavesBeGone;
+import fuzs.leavesbegone.common.LeavesBeGone;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;

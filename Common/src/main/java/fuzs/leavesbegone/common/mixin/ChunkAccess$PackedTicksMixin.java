@@ -1,6 +1,6 @@
-package fuzs.leavesbegone.mixin;
+package fuzs.leavesbegone.common.mixin;
 
-import fuzs.leavesbegone.world.level.chunk.RandomBlockTickerPackedTicks;
+import fuzs.leavesbegone.common.world.level.chunk.RandomBlockTickerPackedTicks;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.ticks.SavedTick;

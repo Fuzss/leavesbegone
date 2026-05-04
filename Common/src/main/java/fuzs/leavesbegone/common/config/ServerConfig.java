@@ -1,4 +1,4 @@
-package fuzs.leavesbegone.config;
+package fuzs.leavesbegone.common.config;
 
 import fuzs.puzzleslib.common.api.config.v3.Config;
 import fuzs.puzzleslib.common.api.config.v3.ConfigCore;

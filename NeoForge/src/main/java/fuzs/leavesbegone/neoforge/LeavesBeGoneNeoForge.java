@@ -1,7 +1,7 @@
 package fuzs.leavesbegone.neoforge;
 
-import fuzs.leavesbegone.LeavesBeGone;
-import fuzs.leavesbegone.data.ModBlockTagProvider;
+import fuzs.leavesbegone.common.LeavesBeGone;
+import fuzs.leavesbegone.common.data.ModBlockTagProvider;
 import fuzs.puzzleslib.common.api.core.v1.ModConstructor;
 import fuzs.puzzleslib.neoforge.api.data.v2.core.DataProviderHelper;
 import net.neoforged.fml.common.Mod;

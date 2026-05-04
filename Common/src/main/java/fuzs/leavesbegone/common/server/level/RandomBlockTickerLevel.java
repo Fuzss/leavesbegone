@@ -1,4 +1,4 @@
-package fuzs.leavesbegone.server.level;
+package fuzs.leavesbegone.common.server.level;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.ticks.LevelTicks;

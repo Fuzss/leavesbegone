@@ -1,10 +1,10 @@
-package fuzs.leavesbegone.mixin;
+package fuzs.leavesbegone.common.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.serialization.Codec;
-import fuzs.leavesbegone.LeavesBeGone;
-import fuzs.leavesbegone.world.level.chunk.RandomBlockTickerChunk;
-import fuzs.leavesbegone.world.level.chunk.RandomBlockTickerPackedTicks;
+import fuzs.leavesbegone.common.LeavesBeGone;
+import fuzs.leavesbegone.common.world.level.chunk.RandomBlockTickerChunk;
+import fuzs.leavesbegone.common.world.level.chunk.RandomBlockTickerPackedTicks;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;

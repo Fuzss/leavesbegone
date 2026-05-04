@@ -1,6 +1,6 @@
-package fuzs.leavesbegone.data;
+package fuzs.leavesbegone.common.data;
 
-import fuzs.leavesbegone.helper.LeavesDistanceHelper;
+import fuzs.leavesbegone.common.helper.LeavesDistanceHelper;
 import fuzs.puzzleslib.common.api.data.v2.core.DataProviderContext;
 import fuzs.puzzleslib.common.api.data.v2.tags.AbstractTagAppender;
 import fuzs.puzzleslib.common.api.data.v2.tags.AbstractTagProvider;
