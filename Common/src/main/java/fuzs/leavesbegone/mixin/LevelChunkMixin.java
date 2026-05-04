@@ -5,11 +5,13 @@ import fuzs.leavesbegone.world.level.chunk.RandomBlockTickerChunk;
 import net.minecraft.core.Registry;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.chunk.*;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.chunk.LevelChunkSection;
+import net.minecraft.world.level.chunk.UpgradeData;
 import net.minecraft.world.level.levelgen.blending.BlendingData;
 import net.minecraft.world.ticks.LevelChunkTicks;
 import org.jetbrains.annotations.Nullable;
@@ -22,20 +24,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Objects;
 
 /**
- * aggressive null checking is done as a null values sometimes causes the game to hang without revealing anything in the log or a crash-report
+ * aggressive null checking is done as a null values sometimes causes the game to hang without revealing anything in the
+ * log or a crash-report
  */
 @Mixin(LevelChunk.class)
 abstract class LevelChunkMixin extends ChunkAccess implements RandomBlockTickerChunk {
     @Unique
-    private LevelChunkTicks<Block> leavesbegone$randomBlockTicks;
+    private LevelChunkTicks<Block> leavesbegone$randomBlockTicks = new LevelChunkTicks<>();
 
     public LevelChunkMixin(ChunkPos chunkPos, UpgradeData upgradeData, LevelHeightAccessor levelHeightAccessor, Registry<Biome> registry, long l, @Nullable LevelChunkSection[] levelChunkSections, @Nullable BlendingData blendingData) {
         super(chunkPos, upgradeData, levelHeightAccessor, registry, l, levelChunkSections, blendingData);
-    }
-
-    @Inject(method = "<init>(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/level/ChunkPos;Lnet/minecraft/world/level/chunk/UpgradeData;Lnet/minecraft/world/ticks/LevelChunkTicks;Lnet/minecraft/world/ticks/LevelChunkTicks;J[Lnet/minecraft/world/level/chunk/LevelChunkSection;Lnet/minecraft/world/level/chunk/LevelChunk$PostLoadProcessor;Lnet/minecraft/world/level/levelgen/blending/BlendingData;)V", at = @At("TAIL"))
-    public void leavesbegone$init(CallbackInfo callback) {
-        this.leavesbegone$randomBlockTicks = new LevelChunkTicks<>();
     }
 
     @Override
@@ -60,7 +58,8 @@ abstract class LevelChunkMixin extends ChunkAccess implements RandomBlockTickerC
     public void leavesbegone$registerTickContainerInLevel(ServerLevel level, CallbackInfo callback) {
         if (!(level instanceof RandomBlockTickerLevel randomBlockTickerLevel)) return;
         Objects.requireNonNull(this.leavesbegone$randomBlockTicks, "Random block ticks was null");
-        randomBlockTickerLevel.leavesbegone$getRandomBlockTicks().addContainer(this.chunkPos, this.leavesbegone$randomBlockTicks);
+        randomBlockTickerLevel.leavesbegone$getRandomBlockTicks()
+                .addContainer(this.chunkPos, this.leavesbegone$randomBlockTicks);
     }
 
     @Inject(method = "unregisterTickContainerFromLevel", at = @At("TAIL"))
